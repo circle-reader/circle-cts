@@ -4,8 +4,11 @@ import { useApp } from 'circle-ihk';
 import { Drawer, Modal } from 'antd';
 import type { DrawerProps } from 'antd';
 
-export interface IPopupProps extends Omit<DrawerProps, 'getContainer'> {
+export interface IPopupProps
+  extends Omit<DrawerProps, 'width' | 'getContainer'> {
+  width?: number;
   type?: 'toolbar' | 'modal';
+  centered?: boolean;
   getContainer?: () => any;
   onCancel?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }

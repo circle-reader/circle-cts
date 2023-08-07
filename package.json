@@ -1,6 +1,6 @@
 {
   "name": "circle-cts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "description": "Circle Reader Component Library",
   "sideEffects": [
@@ -22,11 +22,11 @@
     }
   },
   "dependencies": {
-    "@ant-design/icons": "^5.1.0",
-    "antd": "^5.7.3",
+    "@ant-design/icons": "^5.2.2",
+    "antd": "^5.8.2",
+    "circle-ihk": "1.0.0-6",
     "classnames": "^2.3.2",
-    "react": "^18.2.0",
-    "circle-ihk": "file:///Users/ranhe/circle/tools/ihk"
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",

@@ -52,22 +52,39 @@ export default function App(props: IProps) {
     if (!isElement(container)) {
       return;
     }
-    const target = container.querySelector('.app');
+    const target = container.querySelector('.ant-app');
     if (!isElement(target)) {
       return;
     }
     if (open) {
-      !app.device.phone &&
-        target.style.setProperty('padding-right', !type ? `${width}px` : '1px');
-      setTimeout(() => {
-        app.fire('toolbar_state', id, 'active');
-      }, 0);
+      if (!app.device.phone && !type) {
+        target.style.setProperty('padding-right', `${width}px`);
+        const toolbar = app.field('toolbar');
+        if (isElement(toolbar)) {
+          const handle = toolbar.querySelector('.toolbar');
+          if (handle) {
+            handle.style.setProperty(
+              'right',
+              `calc((100vw - var(--width)) / 2 + ${width / 2 - 36}px)`
+            );
+          }
+        }
+      }
     } else {
-      !app.device.phone && target.style.removeProperty('padding-right');
-      setTimeout(() => {
-        app.fire('toolbar_state', id, 'inactive');
-      }, 0);
+      if (!app.device.phone && !type) {
+        target.style.removeProperty('padding-right');
+        const toolbar = app.field('toolbar');
+        if (isElement(toolbar)) {
+          const handle = toolbar.querySelector('.toolbar');
+          if (handle) {
+            handle.style.removeProperty('right');
+          }
+        }
+      }
     }
+    setTimeout(() => {
+      app.fire('toolbar_state', id, open ? 'active' : 'inactive');
+    }, 0);
   }, [open]);
 
   useEffect(() => {
