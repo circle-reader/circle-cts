@@ -10,8 +10,9 @@
   "typings": "dist/index.d.ts",
   "author": "Ranhe <wenguang.fe@gmail.com> (https://circlereader.com/)",
   "scripts": {
-    "build": "npx tsc && yarn copy-files",
-    "copy-files": "copyfiles -u 1 src/**/*.html src/**/*.less dist/",
+    "build:css": "node-sass -r src -o dist",
+    "compile": "npx tsc -p tsconfig.json && tsccss -o dist",
+    "build": "npm run build:css && npm run compile",
     "release": "npm run build && npm publish",
     "lint": "eslint src/**",
     "prepare": "husky install"
@@ -24,9 +25,10 @@
   "dependencies": {
     "@ant-design/icons": "^5.2.2",
     "antd": "^5.8.2",
-    "circle-ihk": "1.0.0-6",
+    "circle-ihk": "file:///Users/ranhe/circle/tools/ihk",
     "classnames": "^2.3.2",
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "react-draggable": "^4.4.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",
@@ -37,14 +39,15 @@
     "@types/react-dom": "^18.2.6",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
-    "copyfiles": "^2.4.1",
     "eslint": "^8.43.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "lodash": "^4.17.21",
+    "node-sass": "^9.0.0",
     "prettier": "^2.8.8",
+    "tsccss": "^1.0.0",
     "typescript": "^5.1.6"
   }
 }

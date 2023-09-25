@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { isElement, useApp } from 'circle-ihk';
 import Popup, { IPopupProps } from './popup';
-import './index.less';
+import './index.css';
 
 export interface IProps extends IPopupProps {
   id: string;
@@ -85,7 +85,7 @@ export default function App(props: IProps) {
     setTimeout(() => {
       app.fire('toolbar_state', id, open ? 'active' : 'inactive');
     }, 0);
-  }, [open]);
+  }, [width, open]);
 
   useEffect(() => {
     return app.on('render_leave', () => {

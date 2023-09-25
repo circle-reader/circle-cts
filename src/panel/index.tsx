@@ -2,7 +2,7 @@ import cx from 'classnames';
 import { Space, Button } from 'antd';
 import Draggable from 'react-draggable';
 import React, { useEffect } from 'react';
-import { useData, isElement } from 'circle-ihk';
+import { useData, isUndefined } from 'circle-ihk';
 import { CloseOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import './index.css';
 
@@ -21,7 +21,7 @@ interface IProps {
   };
 }
 
-export default function Sidebar(props: IProps) {
+export default function Panel(props: IProps) {
   const {
     title,
     onClose,
@@ -30,16 +30,18 @@ export default function Sidebar(props: IProps) {
     addonAfter,
     addonBefore,
     width = 340,
-    id = 'sidebar',
-    defaultPosition = { x: 0, y: 0 },
+    id = 'panel',
+    defaultPosition,
   } = props;
-  const { app, value, onChange } = useData({
+  const { value, onChange } = useData({
     id: `${id}_fold`,
     defaultValue: false,
   });
   const { value: position, onChange: setPosition } = useData({
     id: `${id}_position`,
-    defaultValue: defaultPosition,
+    defaultValue: isUndefined(defaultPosition)
+      ? { x: window.innerWidth - width - 20, y: 20 }
+      : defaultPosition,
   });
   const handleFold = () => {
     onChange(!value);
@@ -69,74 +71,48 @@ export default function Sidebar(props: IProps) {
 
   useEffect(() => {
     let changed = false;
-    const limit = window.innerHeight - 70;
-    if (position.y > limit) {
-      position.y = limit;
-      changed = true;
+    const limit = {
+      x: window.innerWidth - 70,
+      y: window.innerHeight - 70,
+    };
+    if (position.x > limit.x) {
+      position.x = limit.x;
+      if (!changed) {
+        changed = true;
+      }
+    }
+    if (position.y > limit.y) {
+      position.y = limit.y;
+      if (!changed) {
+        changed = true;
+      }
     }
     if (changed) {
       setPosition({ ...position });
     }
   }, [position]);
 
-  useEffect(() => {
-    if (app.device.phone) {
-      return;
-    }
-    const container = app.field('container');
-    if (!isElement(container)) {
-      return;
-    }
-    const target = container.querySelector('.ant-app');
-    if (!isElement(target)) {
-      return;
-    }
-    if (value) {
-      target.style.removeProperty('padding-right');
-      const toolbar = app.field('toolbar');
-      if (isElement(toolbar)) {
-        const handle = toolbar.querySelector('.toolbar');
-        if (handle) {
-          handle.style.removeProperty('right');
-        }
-      }
-    } else {
-      target.style.setProperty('padding-right', `${width}px`);
-      const toolbar = app.field('toolbar');
-      if (isElement(toolbar)) {
-        const handle = toolbar.querySelector('.toolbar');
-        if (handle) {
-          handle.style.setProperty(
-            'right',
-            `calc((100vw - var(--width)) / 2 + ${width / 2 - 36}px)`
-          );
-        }
-      }
-    }
-  }, [width, value]);
-
   return (
     <Draggable
-      axis="y"
-      disabled={!value}
       onDrag={handleDrag}
       handle=".panel-draggable"
+      axis={value ? 'y' : 'both'}
       defaultClassName="panel-draggable"
       defaultClassNameDragged="panel-dragged"
       defaultClassNameDragging="panel-dragging"
-      position={value ? position : { x: 0, y: 0 }}
+      position={value ? { x: 0, y: position.y } : position}
       bounds={{
         left: 0,
-        right: 0,
+        right: window.innerWidth - width,
         top: 0,
         bottom: window.innerHeight - 100,
       }}
     >
       <div
         style={{ width: value ? 'auto' : width }}
-        className={cx('sidebar-wrapper', { className, 'sidebar-fold': value })}
+        className={cx('panel-wrapper', { className, 'panel-fold': value })}
       >
-        <div className={cx('header', { 'sidebar-draggable': value })}>
+        <div className="header panel-draggable">
           <h3 className="title">{title}</h3>
           <Space size={0}>
             {addonBefore}

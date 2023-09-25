@@ -21,6 +21,7 @@ export default function Popup(props: IPopupProps) {
     placement,
     onCancel,
     className,
+    rootClassName,
     ...resetProps
   } = props;
   const { app } = useApp();
@@ -32,7 +33,7 @@ export default function Popup(props: IPopupProps) {
         width={width}
         onClose={onCancel}
         className={className}
-        rootClassName="popup-toolbar"
+        rootClassName={cx('popup-toolbar', rootClassName)}
         placement={app.device.phone ? 'bottom' : placement}
       >
         {children}
@@ -45,6 +46,7 @@ export default function Popup(props: IPopupProps) {
       <Modal
         {...resetProps}
         onCancel={onCancel}
+        rootClassName={rootClassName}
         width={app.device.phone ? '90%' : width}
         className={cx(className, 'popup-modal')}
       >
@@ -58,8 +60,8 @@ export default function Popup(props: IPopupProps) {
       {...resetProps}
       onClose={onCancel}
       className={className}
-      rootClassName="popup-drawer"
       width={app.device.phone ? '100%' : width}
+      rootClassName={cx('popup-drawer', rootClassName)}
       placement={app.device.phone ? 'bottom' : placement}
     >
       {children}

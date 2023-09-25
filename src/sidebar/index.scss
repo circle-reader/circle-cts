@@ -1,0 +1,76 @@
+@keyframes sidebarFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.sidebar-wrapper {
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 90;
+  user-select: none;
+  line-height: normal;
+  background: var(--bg);
+  transition: all 300ms;
+  border-radius: 10px 0px 0px 10px;
+  animation: sidebarFadeIn ease 0.3s;
+  box-shadow: -2px 0px 10px var(--canvas);
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 10px 6px 3px 14px;
+    justify-content: space-between;
+    background-color: rgba(var(--bg-r), var(--bg-g), var(--bg-b), 0.2);
+    border-bottom: 1px solid rgba(var(--bg-r), var(--bg-g), var(--bg-b), 0.5);
+    .title {
+      flex-grow: 1;
+      font-size: 15px;
+      margin-bottom: 0;
+    }
+    .ant-btn.ant-btn-icon-only {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+    }
+  }
+  .body {
+    font-size: 14px;
+    overflow: auto;
+    max-height: calc(100vh - 43px);
+    scrollbar-width: thin;
+    scrollbar-color: var(--thumb) var(--track);
+
+    &::-webkit-scrollbar {
+      width: var(--track-width);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--track);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: var(--radius);
+      background: var(--thumb);
+    }
+  }
+  .sidebar-draggable {
+    cursor: move;
+  }
+  &.sidebar-fold {
+    transition: none;
+    border-radius: 5px 0px 0px 5px;
+    .header {
+      border-width: 0;
+      padding: 6px 6px 6px 13px;
+      .title {
+        font-weight: normal;
+        margin-right: 2px;
+        font-size: 14px;
+      }
+    }
+  }
+}
