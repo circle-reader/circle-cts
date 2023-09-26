@@ -2,18 +2,34 @@ import cx from 'classnames';
 import { Space, Button } from 'antd';
 import Draggable from 'react-draggable';
 import React, { useEffect } from 'react';
-import { useData, isUndefined } from 'circle-ihk';
-import { CloseOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { useData, isElement, isUndefined } from 'circle-ihk';
+import {
+  LeftOutlined,
+  CloseOutlined,
+  PushpinOutlined,
+  FullscreenOutlined,
+  VerticalLeftOutlined,
+  FullscreenExitOutlined,
+} from '@ant-design/icons';
+import PanelBody from './body';
+import PanelHeader from './header';
 import './index.css';
 
 interface IProps {
-  id?: string;
+  id: string;
   title: string;
   width?: number;
+  height?: number;
+  exitText?: string;
+  pinText?: string;
+  adsorbText?: string;
+  expandText?: string;
+  collapseText?: string;
   className?: string;
   onClose?: () => void;
-  addonAfter?: React.ReactNode;
-  addonBefore?: React.ReactNode;
+  collapsable?: boolean;
+  rootClassName?: string;
+  extra?: React.ReactNode;
   children?: React.ReactNode;
   defaultPosition?: {
     x: number;
@@ -23,19 +39,30 @@ interface IProps {
 
 export default function Panel(props: IProps) {
   const {
+    id,
     title,
+    extra,
     onClose,
+    pinText,
+    exitText,
     children,
     className,
-    addonAfter,
-    addonBefore,
+    adsorbText,
+    expandText,
+    collapseText,
     width = 340,
-    id = 'panel',
+    height = 600,
+    rootClassName,
     defaultPosition,
+    collapsable = true,
   } = props;
-  const { value, onChange } = useData({
-    id: `${id}_fold`,
-    defaultValue: false,
+  const { app, value, onChange } = useData({
+    id: `${id}_panel`,
+    defaultValue: {
+      pin: false,
+      adsorb: false,
+      collapse: false,
+    },
   });
   const { value: position, onChange: setPosition } = useData({
     id: `${id}_position`,
@@ -43,8 +70,11 @@ export default function Panel(props: IProps) {
       ? { x: window.innerWidth - width - 20, y: 20 }
       : defaultPosition,
   });
-  const handleFold = () => {
-    onChange(!value);
+  const handleAdsorb = () => {
+    onChange({
+      ...value,
+      adsorb: !value.adsorb,
+    });
   };
   const handleDrag = (
     // @ts-ignore
@@ -68,11 +98,22 @@ export default function Panel(props: IProps) {
       y: data.y,
     });
   };
-
-  useEffect(() => {
+  const handlePin = () => {
+    onChange({
+      ...value,
+      pin: !value.pin,
+    });
+  };
+  const handleCollapse = () => {
+    onChange({
+      ...value,
+      collapse: !value.collapse,
+    });
+  };
+  const autoResize = () => {
     let changed = false;
     const limit = {
-      x: window.innerWidth - 70,
+      x: window.innerWidth - width,
       y: window.innerHeight - 70,
     };
     if (position.x > limit.x) {
@@ -90,17 +131,65 @@ export default function Panel(props: IProps) {
     if (changed) {
       setPosition({ ...position });
     }
-  }, [position]);
+  };
+
+  useEffect(() => {
+    document.addEventListener('resize', autoResize);
+    autoResize();
+    return () => {
+      document.removeEventListener('resize', autoResize);
+    };
+  }, [position, width]);
+
+  useEffect(() => {
+    if (app.device.phone) {
+      return;
+    }
+    const container = app.field('container');
+    if (!isElement(container)) {
+      return;
+    }
+    const target = container.querySelector('.ant-app');
+    if (!isElement(target)) {
+      return;
+    }
+    if (value.adsorb && value.collapse) {
+      target.style.setProperty('padding-right', `${width}px`);
+      const toolbar = app.field('toolbar');
+      if (isElement(toolbar)) {
+        const handle = toolbar.querySelector('.toolbar');
+        if (handle) {
+          handle.style.setProperty(
+            'right',
+            `calc((100vw - var(--width)) / 2 + ${width / 2 - 36}px)`
+          );
+        }
+      }
+    } else {
+      target.style.removeProperty('padding-right');
+      const toolbar = app.field('toolbar');
+      if (isElement(toolbar)) {
+        const handle = toolbar.querySelector('.toolbar');
+        if (handle) {
+          handle.style.removeProperty('right');
+        }
+      }
+    }
+  }, [value, width]);
 
   return (
     <Draggable
       onDrag={handleDrag}
+      cancel=".panel-cancel"
       handle=".panel-draggable"
-      axis={value ? 'y' : 'both'}
+      axis={value.adsorb ? 'y' : 'both'}
       defaultClassName="panel-draggable"
       defaultClassNameDragged="panel-dragged"
       defaultClassNameDragging="panel-dragging"
-      position={value ? { x: 0, y: position.y } : position}
+      disabled={(value.adsorb && value.collapse) || value.pin}
+      position={
+        value.adsorb ? { x: 0, y: value.collapse ? 0 : position.y } : position
+      }
       bounds={{
         left: 0,
         right: window.innerWidth - width,
@@ -109,25 +198,75 @@ export default function Panel(props: IProps) {
       }}
     >
       <div
-        style={{ width: value ? 'auto' : width }}
-        className={cx('panel-wrapper', { className, 'panel-fold': value })}
+        style={{ width: !value.collapse && value.adsorb ? 'auto' : width }}
+        className={cx('panel-wrapper', rootClassName, {
+          'panel-adsorb': value.adsorb && !value.collapse,
+          'pabel-render': value.adsorb && value.collapse,
+        })}
       >
-        <div className="header panel-draggable">
-          <h3 className="title">{title}</h3>
-          <Space size={0}>
-            {addonBefore}
+        <PanelHeader
+          title={title}
+          className={cx({
+            'panel-draggable':
+              (!value.adsorb || (value.adsorb && !value.collapse)) &&
+              !value.pin,
+          })}
+        >
+          <Space size={4} className="panel-action panel-cancel">
+            {extra}
+            {(!value.adsorb || value.collapse) && (
+              <Button
+                type="text"
+                onClick={onClose}
+                icon={<CloseOutlined />}
+                title={exitText || app.i18n('exit')}
+              />
+            )}
             <Button
               type="text"
-              onClick={handleFold}
-              icon={value ? <LeftOutlined /> : <RightOutlined />}
+              title={pinText}
+              onClick={handlePin}
+              icon={<PushpinOutlined />}
+              className={cx({ 'panel-pin': value.pin })}
             />
-            {!value && (
-              <Button type="text" onClick={onClose} icon={<CloseOutlined />} />
+            {collapsable && !value.pin && value.adsorb && (
+              <Button
+                type="text"
+                onClick={handleCollapse}
+                title={
+                  value.collapse
+                    ? expandText || app.i18n('expand')
+                    : collapseText || app.i18n('collapse')
+                }
+                icon={
+                  value.collapse ? (
+                    <FullscreenExitOutlined />
+                  ) : (
+                    <FullscreenOutlined />
+                  )
+                }
+              />
             )}
-            {addonAfter}
+            {!value.pin && (
+              <Button
+                type="text"
+                onClick={handleAdsorb}
+                title={adsorbText || app.i18n('adsorb')}
+                icon={
+                  value.adsorb ? <LeftOutlined /> : <VerticalLeftOutlined />
+                }
+              />
+            )}
           </Space>
-        </div>
-        {!value && <div className="body">{children}</div>}
+        </PanelHeader>
+        {(value.collapse || !value.adsorb) && (
+          <PanelBody
+            className={className}
+            height={value.adsorb ? 'auto' : height}
+          >
+            {children}
+          </PanelBody>
+        )}
       </div>
     </Draggable>
   );
