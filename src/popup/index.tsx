@@ -35,7 +35,7 @@ export default function App(props: IProps) {
     return app.on(id, (...args: Array<string | boolean>) => {
       setOpen((val) => {
         if (onChange) {
-          args.unshift(val);
+          args.unshift(!val);
           const changeValue = onChange.apply(app, args);
           if (changeValue) {
             return val;

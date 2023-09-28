@@ -7,7 +7,7 @@ interface IProps {
   children?: React.ReactNode;
 }
 
-export default function Panel(props: IProps) {
+export default function PanelHeader(props: IProps) {
   const { title, className, children } = props;
 
   return (

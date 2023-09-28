@@ -46,6 +46,7 @@
     }
   }
   .panel-body {
+    max-height: 80vh;
     font-size: 14px;
     overflow: auto;
   }
@@ -76,6 +77,7 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     .panel-body {
+      max-height: 100vh;
       height: calc(100vh - 43px);
       scrollbar-width: thin;
       scrollbar-color: var(--thumb) var(--track);

@@ -5,7 +5,6 @@ import React, { useEffect } from 'react';
 import { useData, isElement, isUndefined } from 'circle-ihk';
 import {
   LeftOutlined,
-  CloseOutlined,
   PushpinOutlined,
   FullscreenOutlined,
   VerticalLeftOutlined,
@@ -16,21 +15,23 @@ import PanelHeader from './header';
 import './index.css';
 
 interface IProps {
-  id: string;
   title: string;
   width?: number;
   height?: number;
-  exitText?: string;
   pinText?: string;
   adsorbText?: string;
   expandText?: string;
   collapseText?: string;
   className?: string;
-  onClose?: () => void;
   collapsable?: boolean;
   rootClassName?: string;
   extra?: React.ReactNode;
-  children?: React.ReactNode;
+  children?: React.ReactNode | ((height: number) => React.ReactNode);
+  defaultValue?: {
+    pin: boolean;
+    adsorb: boolean;
+    collapse: boolean;
+  };
   defaultPosition?: {
     x: number;
     y: number;
@@ -39,12 +40,9 @@ interface IProps {
 
 export default function Panel(props: IProps) {
   const {
-    id,
     title,
     extra,
-    onClose,
     pinText,
-    exitText,
     children,
     className,
     adsorbText,
@@ -53,27 +51,37 @@ export default function Panel(props: IProps) {
     width = 340,
     height = 600,
     rootClassName,
+    defaultValue,
     defaultPosition,
     collapsable = true,
   } = props;
   const { app, value, onChange } = useData({
-    id: `${id}_panel`,
-    defaultValue: {
-      pin: false,
-      adsorb: false,
-      collapse: false,
-    },
+    id: 'panel',
+    defaultValue: isUndefined(defaultValue)
+      ? {
+          pin: false,
+          adsorb: false,
+          collapse: false,
+        }
+      : defaultValue,
   });
   const { value: position, onChange: setPosition } = useData({
-    id: `${id}_position`,
+    id: 'position',
     defaultValue: isUndefined(defaultPosition)
       ? { x: window.innerWidth - width - 20, y: 20 }
       : defaultPosition,
   });
   const handleAdsorb = () => {
+    const nextAdsorb = !value.adsorb;
+    if (!nextAdsorb) {
+      setPosition({
+        x: window.innerWidth - width - 20,
+        y: (window.innerHeight - height) / 2,
+      });
+    }
     onChange({
       ...value,
-      adsorb: !value.adsorb,
+      adsorb: nextAdsorb,
     });
   };
   const handleDrag = (
@@ -214,19 +222,11 @@ export default function Panel(props: IProps) {
         >
           <Space size={4} className="panel-action panel-cancel">
             {extra}
-            {(!value.adsorb || value.collapse) && (
-              <Button
-                type="text"
-                onClick={onClose}
-                icon={<CloseOutlined />}
-                title={exitText || app.i18n('exit')}
-              />
-            )}
             <Button
               type="text"
-              title={pinText}
               onClick={handlePin}
               icon={<PushpinOutlined />}
+              title={pinText || app.i18n('pin')}
               className={cx({ 'panel-pin': value.pin })}
             />
             {collapsable && !value.pin && value.adsorb && (
