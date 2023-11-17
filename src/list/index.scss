@@ -1,0 +1,38 @@
+.ant-list.list-wrapper {
+  .ant-list-header {
+    padding: 10px 15px;
+  }
+  .ant-list-item {
+    position: relative;
+    padding: 10px 15px 0;
+    .ant-list-item-meta {
+      margin-bottom: 8px;
+      .ant-list-item-meta-title {
+        font-weight: normal;
+        font-size: 15px;
+        margin-bottom: 2px;
+      }
+    }
+    .ant-list-item-action {
+      opacity: 0;
+      border-radius: 3px;
+      background-color: var(--bg);
+      position: absolute;
+      right: 4px;
+      top: 6px;
+      margin: 0;
+      & > li {
+        padding: 0;
+      }
+    }
+    &:hover {
+      .ant-list-item-action {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.list-cursor {
+  cursor: pointer;
+}

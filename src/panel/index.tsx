@@ -191,7 +191,7 @@ export default function Panel(props: IProps) {
       cancel=".panel-cancel"
       handle=".panel-draggable"
       axis={value.adsorb ? 'y' : 'both'}
-      defaultClassName="panel-draggable"
+      defaultClassName="panel-drag"
       defaultClassNameDragged="panel-dragged"
       defaultClassNameDragging="panel-dragging"
       disabled={(value.adsorb && value.collapse) || value.pin}

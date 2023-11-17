@@ -5,6 +5,7 @@ import './index.css';
 
 export interface IProps extends IPopupProps {
   id: string;
+  placement?: 'left' | 'right';
   type?: 'toolbar' | 'modal';
   destoryWithRender?: boolean;
   onVisible?: (open: boolean) => void;
@@ -20,6 +21,7 @@ export default function App(props: IProps) {
     onVisible,
     children,
     width = 378,
+    placement = 'right',
     destoryWithRender = true,
     ...resetProps
   } = props;
@@ -58,21 +60,23 @@ export default function App(props: IProps) {
     }
     if (open) {
       if (!app.device.phone && !type) {
-        target.style.setProperty('padding-right', `${width}px`);
+        target.style.setProperty(`padding-${placement}`, `${width}px`);
         const toolbar = app.field('toolbar');
         if (isElement(toolbar)) {
           const handle = toolbar.querySelector('.toolbar');
           if (handle) {
             handle.style.setProperty(
               'right',
-              `calc((100vw - var(--width)) / 2 + ${width / 2 - 36}px)`
+              placement === 'right'
+                ? `calc((100vw - var(--width)) / 2 + ${width / 2 - 36}px)`
+                : `calc((100vw - var(--width)) / 2 - ${width / 2 + 36}px)`
             );
           }
         }
       }
     } else {
       if (!app.device.phone && !type) {
-        target.style.removeProperty('padding-right');
+        target.style.removeProperty(`padding-${placement}`);
         const toolbar = app.field('toolbar');
         if (isElement(toolbar)) {
           const handle = toolbar.querySelector('.toolbar');
@@ -103,6 +107,7 @@ export default function App(props: IProps) {
       open={open}
       width={width}
       onCancel={handleCancel}
+      placement={placement}
       {...resetProps}
     >
       {children}
