@@ -11,7 +11,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.60.1
   '@typescript-eslint/parser': ^5.60.1
   antd: ^5.8.2
-  circle-ihk: file:///Users/ranhe/circle/tools/ihk
+  circle-ihk: ^1.0.0-11
   classnames: ^2.3.2
   eslint: ^8.43.0
   eslint-config-prettier: ^8.8.0
@@ -31,7 +31,7 @@ specifiers:
 dependencies:
   '@ant-design/icons': 5.2.5_react@18.2.0
   antd: 5.8.2_react@18.2.0
-  circle-ihk: file:../ihk
+  circle-ihk: 1.0.0-11
   classnames: 2.3.2
   rc-align: 4.0.15_react@18.2.0
   rc-virtual-list: 3.11.2_react@18.2.0
@@ -1637,6 +1637,12 @@ packages:
     resolution: {integrity: sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==}
     engines: {node: '>=10'}
     dev: true
+
+  /circle-ihk/1.0.0-11:
+    resolution: {integrity: sha512-K91XhPyz+zHo76g/Q9fZUQW8NBqjTzrclypHVnYvLcbDZvyixos3J2NSwR29DvtXt+aiZIbPnbohu1DeyPPLrQ==}
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /class-utils/0.3.6:
     resolution: {integrity: sha512-qOhPa/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg==}
@@ -5361,11 +5367,3 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
-
-  file:../ihk:
-    resolution: {directory: ../ihk, type: directory}
-    name: circle-ihk
-    version: 1.0.0-10
-    dependencies:
-      react: 18.2.0
-    dev: false
