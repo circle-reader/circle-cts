@@ -2,7 +2,7 @@ import cx from 'classnames';
 import { Space, Button } from 'antd';
 import Draggable from 'react-draggable';
 import React, { useEffect } from 'react';
-import { useData, isElement } from 'circle-ihk';
+import { useData } from 'circle-ihk';
 import { CloseOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import './index.css';
 
@@ -33,7 +33,7 @@ export default function Sidebar(props: IProps) {
     id = 'sidebar',
     defaultPosition = { x: 0, y: 0 },
   } = props;
-  const { app, value, onChange } = useData({
+  const { app, value, onChange, container } = useData({
     id: `${id}_fold`,
     defaultValue: false,
   });
@@ -68,6 +68,16 @@ export default function Sidebar(props: IProps) {
   };
 
   useEffect(() => {
+    return app.on('screenshot_change', (busy: boolean) => {
+      if (busy) {
+        container.style.display = 'none';
+      } else {
+        container.style.removeProperty('display');
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     let changed = false;
     const limit = window.innerHeight - 70;
     if (position.y > limit) {
@@ -83,35 +93,10 @@ export default function Sidebar(props: IProps) {
     if (app.device.phone) {
       return;
     }
-    const container = app.field('container');
-    if (!isElement(container)) {
-      return;
-    }
-    const target = container.querySelector('.ant-app');
-    if (!isElement(target)) {
-      return;
-    }
     if (value) {
-      target.style.removeProperty('padding-right');
-      const toolbar = app.field('toolbar');
-      if (isElement(toolbar)) {
-        const handle = toolbar.querySelector('.toolbar');
-        if (handle) {
-          handle.style.removeProperty('right');
-        }
-      }
+      app.fire('display', true, '0px', `offsetright`);
     } else {
-      target.style.setProperty('padding-right', `${width}px`);
-      const toolbar = app.field('toolbar');
-      if (isElement(toolbar)) {
-        const handle = toolbar.querySelector('.toolbar');
-        if (handle) {
-          handle.style.setProperty(
-            'right',
-            `calc((100vw - var(--width)) / 2 + ${width / 2 - 36}px)`
-          );
-        }
-      }
+      app.fire('display', true, `${width}px`, `offsetright`);
     }
   }, [width, value]);
 

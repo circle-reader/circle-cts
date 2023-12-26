@@ -97,3 +97,11 @@
     }
   }
 }
+
+@media print {
+  .panel-wrapper {
+    &.panel-adsorb {
+      display: none;
+    }
+  }
+}

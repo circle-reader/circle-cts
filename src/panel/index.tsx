@@ -1,10 +1,11 @@
 import cx from 'classnames';
 import { Space, Button } from 'antd';
 import Draggable from 'react-draggable';
-import React, { useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useData, isElement, isUndefined } from 'circle-ihk';
 import {
   LeftOutlined,
+  CloseOutlined,
   PushpinOutlined,
   FullscreenOutlined,
   VerticalLeftOutlined,
@@ -19,10 +20,13 @@ interface IProps {
   width?: number;
   height?: number;
   pinText?: string;
+  closeText?: string;
   adsorbText?: string;
   expandText?: string;
   collapseText?: string;
   className?: string;
+  adsorable?: boolean;
+  onClose?: () => void;
   collapsable?: boolean;
   rootClassName?: string;
   extra?: React.ReactNode;
@@ -42,9 +46,11 @@ export default function Panel(props: IProps) {
   const {
     title,
     extra,
+    onClose,
     pinText,
     children,
     className,
+    closeText,
     adsorbText,
     expandText,
     collapseText,
@@ -53,9 +59,12 @@ export default function Panel(props: IProps) {
     rootClassName,
     defaultValue,
     defaultPosition,
+    adsorable = true,
     collapsable = true,
   } = props;
-  const { app, value, onChange } = useData({
+  const cache = useRef('0px');
+  const timer = useRef<any>(null);
+  const { app, value, onChange, container } = useData({
     id: 'panel',
     defaultValue: isUndefined(defaultValue)
       ? {
@@ -142,6 +151,16 @@ export default function Panel(props: IProps) {
   };
 
   useEffect(() => {
+    return app.on('screenshot_change', (busy: boolean) => {
+      if (busy) {
+        container.style.display = 'none';
+      } else {
+        container.style.removeProperty('display');
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     document.addEventListener('resize', autoResize);
     autoResize();
     return () => {
@@ -150,39 +169,24 @@ export default function Panel(props: IProps) {
   }, [position, width]);
 
   useEffect(() => {
-    if (app.device.phone) {
-      return;
-    }
-    const container = app.field('container');
-    if (!isElement(container)) {
-      return;
-    }
-    const target = container.querySelector('.ant-app');
-    if (!isElement(target)) {
-      return;
-    }
-    if (value.adsorb && value.collapse) {
-      target.style.setProperty('padding-right', `${width}px`);
-      const toolbar = app.field('toolbar');
-      if (isElement(toolbar)) {
-        const handle = toolbar.querySelector('.toolbar');
-        if (handle) {
-          handle.style.setProperty(
-            'right',
-            `calc((100vw - var(--width)) / 2 + ${width / 2 - 36}px)`
-          );
-        }
+    timer.current && clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      if (app.device.phone) {
+        return;
       }
-    } else {
-      target.style.removeProperty('padding-right');
-      const toolbar = app.field('toolbar');
-      if (isElement(toolbar)) {
-        const handle = toolbar.querySelector('.toolbar');
-        if (handle) {
-          handle.style.removeProperty('right');
+      if (value.adsorb && value.collapse) {
+        const root = app.field('container');
+        if (isElement(root)) {
+          const offsetright = root.style.getPropertyValue('--offsetright');
+          if (offsetright) {
+            cache.current = offsetright;
+          }
         }
+        app.fire('display', true, `${width}px`, `offsetright`);
+      } else {
+        app.fire('display', true, cache.current || '0px', `offsetright`);
       }
-    }
+    }, 500);
   }, [value, width]);
 
   return (
@@ -221,7 +225,7 @@ export default function Panel(props: IProps) {
           })}
         >
           <Space size={4} className="panel-action panel-cancel">
-            {extra}
+            {(value.collapse || !value.adsorb) && extra}
             <Button
               type="text"
               onClick={handlePin}
@@ -247,7 +251,7 @@ export default function Panel(props: IProps) {
                 }
               />
             )}
-            {!value.pin && (
+            {adsorable && !value.pin && (
               <Button
                 type="text"
                 onClick={handleAdsorb}
@@ -255,6 +259,14 @@ export default function Panel(props: IProps) {
                 icon={
                   value.adsorb ? <LeftOutlined /> : <VerticalLeftOutlined />
                 }
+              />
+            )}
+            {onClose && (
+              <Button
+                type="text"
+                onClick={onClose}
+                icon={<CloseOutlined />}
+                title={closeText || app.i18n('close')}
               />
             )}
           </Space>

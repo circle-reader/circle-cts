@@ -76,8 +76,8 @@ export default function CList(props: IPanelProps) {
             <List.Item
               key={item.id}
               data-id={item.id}
-              extra={extra ? extra(item) : []}
-              actions={actions ? actions(item) : []}
+              extra={extra ? extra(item) : undefined}
+              actions={actions ? actions(item) : undefined}
               onClick={(e: React.MouseEvent) => {
                 handleClick(e, item);
               }}

@@ -29,7 +29,9 @@ export default function Popup(props: IPopupProps) {
   if (type === 'toolbar') {
     return (
       <Drawer
+        styles={{ body: { padding: 0 } }}
         {...resetProps}
+        mask={false}
         width={width}
         onClose={onCancel}
         className={className}

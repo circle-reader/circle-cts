@@ -14,25 +14,14 @@
       }
     }
     .ant-list-item-action {
-      opacity: 0;
-      border-radius: 3px;
-      background-color: var(--bg);
-      position: absolute;
-      right: 4px;
-      top: 6px;
-      margin: 0;
-      & > li {
-        padding: 0;
-      }
-    }
-    &:hover {
-      .ant-list-item-action {
-        opacity: 1;
-      }
+      margin: 0 0 10px;
     }
   }
 }
 
 .list-cursor {
   cursor: pointer;
+  &:hover {
+    background: rgba(var(--bg-r), var(--bg-g), var(--bg-b), 0.5);
+  }
 }

@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { isElement, useApp } from 'circle-ihk';
+import { useApp, isElement } from 'circle-ihk';
+import React, { useRef, useState, useEffect } from 'react';
 import Popup, { IPopupProps } from './popup';
 import './index.css';
 
 export interface IProps extends IPopupProps {
   id: string;
-  placement?: 'left' | 'right';
   type?: 'toolbar' | 'modal';
   destoryWithRender?: boolean;
   onVisible?: (open: boolean) => void;
@@ -25,7 +24,9 @@ export default function App(props: IProps) {
     destoryWithRender = true,
     ...resetProps
   } = props;
-  const { app } = useApp();
+  const cache = useRef('0px');
+  const timer = useRef<any>(null);
+  const { app, container } = useApp();
   const [open, setOpen] = useState(false);
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onVisible && onVisible(false);
@@ -50,45 +51,41 @@ export default function App(props: IProps) {
   }, []);
 
   useEffect(() => {
-    const container = app.field('container');
-    if (!isElement(container)) {
-      return;
-    }
-    const target = container.querySelector('.ant-app');
-    if (!isElement(target)) {
-      return;
-    }
-    if (open) {
-      if (!app.device.phone && !type) {
-        target.style.setProperty(`padding-${placement}`, `${width}px`);
-        const toolbar = app.field('toolbar');
-        if (isElement(toolbar)) {
-          const handle = toolbar.querySelector('.toolbar');
-          if (handle) {
-            handle.style.setProperty(
-              'right',
-              placement === 'right'
-                ? `calc((100vw - var(--width)) / 2 + ${width / 2 - 36}px)`
-                : `calc((100vw - var(--width)) / 2 - ${width / 2 + 36}px)`
-            );
+    return app.on('screenshot_change', (busy: boolean) => {
+      if (busy) {
+        container.style.display = 'none';
+      } else {
+        container.style.removeProperty('display');
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    timer.current && clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      if (open) {
+        if (!app.device.phone && !type) {
+          const root = app.field('container');
+          if (isElement(root)) {
+            const offsetright = root.style.getPropertyValue('--offsetright');
+            if (offsetright) {
+              cache.current = offsetright;
+            }
           }
+          app.fire('display', true, `${width}px`, `offset${placement}`);
+        }
+      } else {
+        if (!app.device.phone && !type) {
+          app.fire(
+            'display',
+            true,
+            cache.current || '0px',
+            `offset${placement}`
+          );
         }
       }
-    } else {
-      if (!app.device.phone && !type) {
-        target.style.removeProperty(`padding-${placement}`);
-        const toolbar = app.field('toolbar');
-        if (isElement(toolbar)) {
-          const handle = toolbar.querySelector('.toolbar');
-          if (handle) {
-            handle.style.removeProperty('right');
-          }
-        }
-      }
-    }
-    setTimeout(() => {
       app.fire('toolbar_state', id, open ? 'active' : 'inactive');
-    }, 0);
+    }, 500);
   }, [width, open]);
 
   useEffect(() => {

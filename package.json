@@ -1,6 +1,6 @@
 {
   "name": "circle-cts",
-  "version": "0.0.2-2",
+  "version": "1.0.4",
   "license": "MIT",
   "description": "Circle Reader Component Library",
   "sideEffects": [
@@ -23,19 +23,18 @@
     }
   },
   "dependencies": {
-    "@ant-design/icons": "^5.2.2",
-    "antd": "^5.8.2",
-    "circle-ihk": "^1.0.0-11",
-    "classnames": "^2.3.2",
+    "@ant-design/icons": "^5.2.6",
+    "antd": "^5.13.3",
+    "circle-ihk": "^1.0.1",
+    "classnames": "^2.5.1",
     "rc-align": "^4.0.15",
-    "rc-virtual-list": "^3.11.2",
+    "rc-virtual-list": "^3.11.3",
     "react": "^18.2.0",
-    "react-draggable": "^4.4.5"
+    "react-draggable": "^4.4.6"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
-    "@types/classnames": "^2.3.1",
     "@types/prop-types": "^15.7.5",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",

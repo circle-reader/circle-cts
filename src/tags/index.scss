@@ -1,8 +1,9 @@
 .tag-plus {
   cursor: pointer;
 }
-.edit-tag {
+.ant-tag.edit-tag {
   user-select: none;
+  margin-bottom: 4px;
 }
 .ant-input.tag-input {
   width: 78px;
