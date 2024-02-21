@@ -35,29 +35,45 @@ export default function App(props: IProps) {
   };
 
   useEffect(() => {
-    return app.on(id, (...args: Array<string | boolean>) => {
-      setOpen((val) => {
-        if (onChange) {
-          args.unshift(!val);
-          const changeValue = onChange.apply(app, args);
-          if (changeValue) {
-            return val;
+    const hooks: Array<() => void> = [];
+    hooks.push(
+      app.on(id, (...args: Array<string | boolean>) => {
+        setOpen((val) => {
+          if (onChange) {
+            args.unshift(!val);
+            const changeValue = onChange.apply(app, args);
+            if (changeValue) {
+              return val;
+            }
           }
+          onVisible && onVisible(!val);
+          return !val;
+        });
+      })
+    );
+    hooks.push(
+      app.on('screenshot_change', (busy: boolean) => {
+        if (busy) {
+          container.style.display = 'none';
+        } else {
+          container.style.removeProperty('display');
         }
-        onVisible && onVisible(!val);
-        return !val;
+      })
+    );
+    hooks.push(
+      app.on('print_change', (busy: boolean) => {
+        if (busy) {
+          container.style.display = 'none';
+        } else {
+          container.style.removeProperty('display');
+        }
+      })
+    );
+    return () => {
+      hooks.forEach((hook) => {
+        hook();
       });
-    });
-  }, []);
-
-  useEffect(() => {
-    return app.on('screenshot_change', (busy: boolean) => {
-      if (busy) {
-        container.style.display = 'none';
-      } else {
-        container.style.removeProperty('display');
-      }
-    });
+    };
   }, []);
 
   useEffect(() => {

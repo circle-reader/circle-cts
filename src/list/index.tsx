@@ -30,17 +30,16 @@ export default function CList(props: IPanelProps) {
   const {
     empty,
     extra,
-    header,
+    height,
     onClick,
     actions,
-    loading,
     virtual,
     className,
     onLoadMore,
     renderItem,
     dataSource = [],
     vertical = true,
-    height = window.innerHeight,
+    ...prop
   } = props;
   const handleClick = (e: React.MouseEvent, data: IListData) => {
     e.stopPropagation();
@@ -48,6 +47,9 @@ export default function CList(props: IPanelProps) {
     onClick && onClick(data);
   };
   const handleScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
+    if (!height) {
+      return;
+    }
     if (
       e.currentTarget.scrollHeight - e.currentTarget.scrollTop + 10 >=
       height
@@ -58,8 +60,7 @@ export default function CList(props: IPanelProps) {
 
   return (
     <List
-      header={header}
-      loading={loading}
+      {...prop}
       className={cx('list-wrapper', className)}
       itemLayout={vertical ? 'vertical' : 'horizontal'}
     >
@@ -67,10 +68,10 @@ export default function CList(props: IPanelProps) {
         <VirtualList
           itemKey="id"
           itemHeight={45}
-          height={height}
           virtual={virtual}
           data={dataSource}
           onScroll={handleScroll}
+          height={virtual && height ? height : undefined}
         >
           {(item: IListData, index: number) => (
             <List.Item
@@ -88,7 +89,7 @@ export default function CList(props: IPanelProps) {
               {item.title && (
                 <List.Item.Meta
                   title={item.title}
-                  description={item.desc}
+                  description={item.description || item.desc}
                   avatar={item.avatar ? <Avatar src={item.avatar} /> : null}
                 />
               )}
@@ -97,11 +98,7 @@ export default function CList(props: IPanelProps) {
           )}
         </VirtualList>
       ) : (
-        <Empty
-          description={empty}
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          style={{ marginTop: height / 2 - 100 }}
-        />
+        <Empty description={empty} image={Empty.PRESENTED_IMAGE_SIMPLE} />
       )}
     </List>
   );

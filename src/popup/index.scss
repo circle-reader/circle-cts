@@ -23,3 +23,13 @@
     }
   }
 }
+
+.mobile {
+  .ant-drawer.popup-toolbar {
+    .ant-drawer-content-wrapper {
+      overflow: auto;
+      max-height: 100vh !important;
+      width: 100vw !important;
+    }
+  }
+}

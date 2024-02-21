@@ -20,8 +20,8 @@ interface IProps {
   className?: string;
   children: React.ReactElement;
   targetOffset?: Array<number>;
-  onMouseLeave: (event: React.MouseEvent) => void;
-  onMouseEnter: (event: React.MouseEvent) => void;
+  onMouseLeave?: (event: React.MouseEvent) => void;
+  onMouseEnter?: (event: React.MouseEvent) => void;
 }
 
 export default function Float(props: IProps) {

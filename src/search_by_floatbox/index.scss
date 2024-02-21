@@ -1,0 +1,29 @@
+.dom-align.wrapper {
+  padding: 0;
+}
+
+.ant-list.search-list {
+  width: 300px;
+  .rc-virtual-list-holder {
+    max-height: 400px;
+    overflow: auto;
+  }
+  .searchmatch {
+    color: #ed0b0b;
+  }
+  .ant-list-item .ant-list-item-meta .ant-list-item-meta-title {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  .ant-list-footer {
+    padding: 0 14px;
+    .footer {
+      text-align: right;
+      opacity: 0.6;
+      .ant-btn {
+        font-size: 12px;
+      }
+    }
+  }
+}
