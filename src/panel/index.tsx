@@ -64,7 +64,7 @@ export default function Panel(props: IProps) {
   } = props;
   const cache = useRef('0px');
   const timer = useRef<any>(null);
-  const { app, value, onChange, container } = useData({
+  const { me, app, value, onChange, container } = useData({
     id: 'panel',
     defaultValue: isUndefined(defaultValue)
       ? {
@@ -151,13 +151,45 @@ export default function Panel(props: IProps) {
   };
 
   useEffect(() => {
-    return app.on('screenshot_change', (busy: boolean) => {
+    const hooks: Array<() => void> = [];
+    function changeFN(busy: boolean) {
       if (busy) {
+        const root = app.field('container');
+        if (isElement(root)) {
+          const offsetright = root.style.getPropertyValue('--offsetright');
+          if (offsetright) {
+            cache.current = offsetright;
+          }
+        }
+        app.fire('display', true, '0px', 'offsetright');
         container.style.display = 'none';
       } else {
+        app.fire('display', true, cache.current || '0px', 'offsetright');
+        cache.current = '';
         container.style.removeProperty('display');
       }
-    });
+    }
+    hooks.push(app.on('print_change', changeFN));
+    hooks.push(app.on('screenshot_change', changeFN));
+    hooks.push(
+      app.on(`${me.id}_enable`, () => {
+        if (app.device.phone) {
+          return;
+        }
+        const root = app.field('container');
+        if (isElement(root)) {
+          const offsetright = root.style.getPropertyValue('--offsetright');
+          if (offsetright) {
+            app.fire('display', true, offsetright, 'offsetright');
+          }
+        }
+      })
+    );
+    return () => {
+      hooks.forEach((hook) => {
+        hook();
+      });
+    };
   }, []);
 
   useEffect(() => {

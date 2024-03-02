@@ -166,10 +166,12 @@ export default function useContext(props: CProps) {
   }, [option.loading]);
 
   useEffect(() => {
-    if (!option.visible) {
-      return;
+    if (option.visible) {
+      app.field('floatbox_visible', true);
+      app.fire('destory_floatbox_panel', me.id);
+    } else {
+      app.field('floatbox_visible', false);
     }
-    app.fire('destory_floatbox_panel', me.id);
   }, [option.visible]);
 
   return {

@@ -26,7 +26,7 @@ export default function App(props: IProps) {
   } = props;
   const cache = useRef('0px');
   const timer = useRef<any>(null);
-  const { app, container } = useApp();
+  const { me, app, container } = useApp();
   const [open, setOpen] = useState(false);
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onVisible && onVisible(false);
@@ -36,6 +36,25 @@ export default function App(props: IProps) {
 
   useEffect(() => {
     const hooks: Array<() => void> = [];
+    function changeFN(busy: boolean) {
+      if (busy) {
+        const root = app.field('container');
+        if (isElement(root)) {
+          const offsetright = root.style.getPropertyValue('--offsetright');
+          if (offsetright) {
+            cache.current = offsetright;
+          }
+        }
+        app.fire('display', true, '0px', 'offsetright');
+        container.style.display = 'none';
+      } else {
+        app.fire('display', true, cache.current || '0px', 'offsetright');
+        cache.current = '';
+        container.style.removeProperty('display');
+      }
+    }
+    hooks.push(app.on('screenshot_change', changeFN));
+    hooks.push(app.on('print_change', changeFN));
     hooks.push(
       app.on(id, (...args: Array<string | boolean>) => {
         setOpen((val) => {
@@ -52,20 +71,15 @@ export default function App(props: IProps) {
       })
     );
     hooks.push(
-      app.on('screenshot_change', (busy: boolean) => {
-        if (busy) {
-          container.style.display = 'none';
-        } else {
-          container.style.removeProperty('display');
-        }
-      })
-    );
-    hooks.push(
-      app.on('print_change', (busy: boolean) => {
-        if (busy) {
-          container.style.display = 'none';
-        } else {
-          container.style.removeProperty('display');
+      app.on(`${me.id}_enable`, () => {
+        if (!app.device.phone && !type) {
+          const root = app.field('container');
+          if (isElement(root)) {
+            const offsetright = root.style.getPropertyValue('--offsetright');
+            if (offsetright) {
+              app.fire('display', true, offsetright, `offset${placement}`);
+            }
+          }
         }
       })
     );
