@@ -174,6 +174,10 @@ export default function useContext(props: CProps) {
     }
   }, [option.visible]);
 
+  useEffect(() => {
+    app.fire('display');
+  }, []);
+
   return {
     option,
     destory,
