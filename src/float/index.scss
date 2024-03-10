@@ -1,4 +1,6 @@
 .dom-align {
+  user-select: none; // 非常重要，删除 firefox 会出错
+
   position: absolute;
   top: 0;
   left: 0;
