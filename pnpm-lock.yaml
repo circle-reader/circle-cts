@@ -10,7 +10,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.60.1
   '@typescript-eslint/parser': ^5.60.1
   antd: ^5.15.0
-  circle-ihk: ^1.0.9
+  circle-ihk: ^1.0.12
   classnames: ^2.5.1
   eslint: ^8.43.0
   eslint-config-prettier: ^8.8.0
@@ -30,7 +30,7 @@ specifiers:
 dependencies:
   '@ant-design/icons': 5.3.1_react@18.2.0
   antd: 5.15.0_react@18.2.0
-  circle-ihk: 1.0.9
+  circle-ihk: 1.0.12
   classnames: 2.5.1
   rc-align: 4.0.15_react@18.2.0
   rc-virtual-list: 3.11.3_react@18.2.0
@@ -1633,8 +1633,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /circle-ihk/1.0.9:
-    resolution: {integrity: sha512-QBKPuJXeF0uKWRtHJD5oZQi8ZrOLFPsDgR71AZVhcm2B8to9DcnVvz6G53svyeeygK22p50CQ+ICbWdSEBm9Pg==}
+  /circle-ihk/1.0.12:
+    resolution: {integrity: sha512-rBbRoYitw66cOr77s1+2W9PHlrd0C7hsQRYRAJ9hFKajCk0V0NF8Ohy3+9G89WlIlNXQjWJaYX2//TMvflJqYw==}
     dependencies:
       nanoid: 5.0.5
       react: 18.2.0
