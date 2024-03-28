@@ -1,4 +1,4 @@
-import { useApp } from 'circle-ihk';
+import { useApp } from 'circle-react-hook';
 import { useRef, useState } from 'react';
 import { Tag, Input, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';

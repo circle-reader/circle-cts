@@ -1,6 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-import { useApp } from 'circle-ihk';
+import { useApp } from 'circle-react-hook';
 import { Drawer, Modal } from 'antd';
 import type { DrawerProps } from 'antd';
 

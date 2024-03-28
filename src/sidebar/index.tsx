@@ -2,7 +2,7 @@ import cx from 'classnames';
 import { Space, Button } from 'antd';
 import Draggable from 'react-draggable';
 import React, { useEffect } from 'react';
-import { useData } from 'circle-ihk';
+import { useData } from 'circle-react-hook';
 import { CloseOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import './index.css';
 

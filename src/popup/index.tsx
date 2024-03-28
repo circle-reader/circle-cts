@@ -1,4 +1,5 @@
-import { useApp, isElement } from 'circle-ihk';
+import { useApp } from 'circle-react-hook';
+import { isElement } from 'circle-utils';
 import React, { useRef, useState, useEffect } from 'react';
 import Popup, { IPopupProps } from './popup';
 import './index.css';

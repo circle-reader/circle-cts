@@ -1,8 +1,9 @@
 import cx from 'classnames';
 import { Space, Button } from 'antd';
 import Draggable from 'react-draggable';
+import { useData } from 'circle-react-hook';
 import React, { useRef, useEffect } from 'react';
-import { useData, isElement, isUndefined } from 'circle-ihk';
+import { isElement, isUndefined } from 'circle-utils';
 import {
   LeftOutlined,
   CloseOutlined,

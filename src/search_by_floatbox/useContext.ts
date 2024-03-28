@@ -1,5 +1,6 @@
 import { IListData } from '../list';
-import { isElement, isString, useApp } from 'circle-ihk';
+import { useApp } from 'circle-react-hook';
+import { isElement, isString } from 'circle-utils';
 import { useRef, useState, useEffect } from 'react';
 
 interface IData {

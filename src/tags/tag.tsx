@@ -1,5 +1,5 @@
 import { Tag, Tooltip } from 'antd';
-import { isChinese } from 'circle-ihk';
+import { isChinese } from 'circle-utils';
 
 interface IProps {
   tag: string;
