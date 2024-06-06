@@ -71,9 +71,9 @@ export default function Tags(props: IProps) {
             tag={tag}
             closable
             key={tag}
-            title="双击编辑"
             className="edit-tag"
             onClose={() => handleClose(tag)}
+            title={app.i18n('double_edit_tag')}
             onDoubleClick={(e: any) => {
               e.preventDefault();
               setEditInputValue(tag);
@@ -108,7 +108,7 @@ export default function Tags(props: IProps) {
             }, 0);
           }}
         >
-          <Tooltip title={app.i18n('add')}>
+          <Tooltip title={app.i18n('tag_add')}>
             <PlusOutlined />
           </Tooltip>
         </Tag>
