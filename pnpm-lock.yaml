@@ -15,10 +15,10 @@ dependencies:
     specifier: ^1.0.1
     version: 1.0.1
   circle-ts:
-    specifier: ^1.0.1
+    specifier: ^1.0.3
     version: 1.0.3
   circle-utils:
-    specifier: ^1.0.4
+    specifier: ^1.0.7
     version: 1.0.7
   classnames:
     specifier: ^2.5.1
