@@ -10,8 +10,8 @@
   "typings": "dist/index.d.ts",
   "author": "Ranhe <wenguang.fe@gmail.com> (https://circlereader.com/)",
   "scripts": {
-    "build:css": "node-sass -r src -o dist",
-    "compile": "npx tsc -p tsconfig.json && tsccss -o dist",
+    "build:css": "sass src:dist --no-source-map",
+    "compile": "npx tsc -p tsconfig.json",
     "build": "npm run build:css && npm run compile",
     "release": "npm run build && npm publish",
     "lint": "eslint src/**",
@@ -25,9 +25,9 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.1",
     "antd": "^5.15.0",
-    "circle-ts": "^1.0.3",
-    "circle-utils": "^1.0.7",
-    "circle-react-hook": "^1.0.1",
+    "circle-react-hook": "^1.0.3",
+    "circle-ts": "^1.0.5",
+    "circle-utils": "^1.0.10",
     "classnames": "^2.5.1",
     "rc-align": "^4.0.15",
     "rc-virtual-list": "^3.11.3",
@@ -48,9 +48,8 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "lodash": "^4.17.21",
-    "node-sass": "^9.0.0",
     "prettier": "^2.8.8",
-    "tsccss": "^1.0.0",
+    "sass": "^1.83.0",
     "typescript": "^5.1.6"
   }
 }

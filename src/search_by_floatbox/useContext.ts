@@ -91,15 +91,10 @@ export default function useContext(props: CProps) {
         };
         setOption((opt) => ({
           ...opt,
+          point,
           items: [],
-          visible: false,
+          visible: true,
           loading: true,
-          point: {
-            clientX: 0,
-            clientY: 0,
-            pageX: 0,
-            pageY: 0,
-          },
         }));
         const payload: {
           format?: 'json' | 'text' | 'blob';
@@ -120,17 +115,14 @@ export default function useContext(props: CProps) {
           .then((data: any) => {
             setOption((opt) => ({
               ...opt,
-              visible: true,
               loading: false,
               items: parse ? parse(data) : data,
               more: getMoreUrl ? getMoreUrl(text) : '',
             }));
-            setTimeout(() => {
-              setOption((opt) => ({
-                ...opt,
-                point,
-              }));
-            }, 100);
+            setOption((opt) => ({
+              ...opt,
+              point,
+            }));
           })
           .catch((err: any) => {
             setOption((opt) => ({
@@ -146,12 +138,10 @@ export default function useContext(props: CProps) {
                 },
               ],
             }));
-            setTimeout(() => {
-              setOption((opt) => ({
-                ...opt,
-                point,
-              }));
-            }, 100);
+            setOption((opt) => ({
+              ...opt,
+              point,
+            }));
           });
       })
     );

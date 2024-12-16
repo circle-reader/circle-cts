@@ -7,6 +7,7 @@ import './index.css';
 export interface IProps extends Omit<AlignProps, 'align'> {
   visible: boolean;
   className?: string;
+  points?: Array<string>;
   targetOffset?: Array<number>;
   onMouseEnter?: (event: React.MouseEvent) => void;
   onMouseLeave?: (event: React.MouseEvent) => void;
@@ -19,6 +20,7 @@ export default function CAlign(props: IProps) {
     className,
     onMouseEnter,
     onMouseLeave,
+    points = ['bc', 'cc'],
     targetOffset = [0, 0],
     ...resetProps
   } = props;
@@ -27,7 +29,7 @@ export default function CAlign(props: IProps) {
     <Align
       monitorWindowResize
       align={{
-        points: ['bc', 'cc'],
+        points,
         targetOffset: targetOffset,
         // @ts-ignore
         overflow: { adjustX: true, adjustY: true, alwaysByViewport: true },

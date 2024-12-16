@@ -19,6 +19,7 @@ interface IProps {
   value?: IPosition;
   className?: string;
   children: React.ReactElement;
+  points?: Array<string>;
   targetOffset?: Array<number>;
   onMouseLeave?: (event: React.MouseEvent) => void;
   onMouseEnter?: (event: React.MouseEvent) => void;
@@ -27,6 +28,7 @@ interface IProps {
 export default function Float(props: IProps) {
   const {
     value,
+    points,
     children,
     className,
     onMouseLeave,
@@ -52,6 +54,7 @@ export default function Float(props: IProps) {
 
   return (
     <Align
+      points={points}
       target={data.point}
       className={className}
       visible={data.visible}
