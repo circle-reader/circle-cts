@@ -7,8 +7,8 @@ import type { DrawerProps } from 'antd';
 export interface IPopupProps
   extends Omit<DrawerProps, 'width' | 'getContainer'> {
   width?: number;
-  type?: 'toolbar' | 'modal';
   centered?: boolean;
+  type?: 'toolbar' | 'modal';
   getContainer?: () => any;
   onCancel?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }

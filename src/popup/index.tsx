@@ -1,10 +1,10 @@
 import { useApp } from 'circle-react-hook';
-import { isElement } from 'circle-utils';
+import { isNumber, isElement } from 'circle-utils';
 import React, { useRef, useState, useEffect } from 'react';
 import Popup, { IPopupProps } from './popup';
 import './index.css';
 
-export interface IProps extends IPopupProps {
+export interface IProps extends Omit<IPopupProps, 'zIndex'> {
   id: string;
   type?: 'toolbar' | 'modal';
   destoryWithRender?: boolean;
@@ -29,6 +29,7 @@ export default function App(props: IProps) {
   const timer = useRef<any>(null);
   const { me, app, container } = useApp();
   const [open, setOpen] = useState(false);
+  const [zIndex, setZIndex] = useState(8000);
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onVisible && onVisible(false);
     setOpen(false);
@@ -65,6 +66,17 @@ export default function App(props: IProps) {
             if (changeValue) {
               return val;
             }
+          }
+          if (!val) {
+            setZIndex((val: number) => {
+              let layer = val + 10;
+              const zindexInField = app.field('zIndex');
+              if (isNumber(zindexInField)) {
+                layer = zindexInField + 10;
+              }
+              app.field('zIndex', layer);
+              return layer;
+            });
           }
           onVisible && onVisible(!val);
           return !val;
@@ -134,6 +146,7 @@ export default function App(props: IProps) {
       type={type}
       open={open}
       width={width}
+      zIndex={zIndex}
       onCancel={handleCancel}
       placement={placement}
       {...resetProps}
