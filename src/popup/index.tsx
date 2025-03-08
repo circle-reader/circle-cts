@@ -29,7 +29,7 @@ export default function App(props: IProps) {
   const timer = useRef<any>(null);
   const { me, app, container } = useApp();
   const [open, setOpen] = useState(false);
-  const [zIndex, setZIndex] = useState(1000);
+  const [zIndex, setZIndex] = useState(8000);
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onVisible && onVisible(false);
     setOpen(false);
