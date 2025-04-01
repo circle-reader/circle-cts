@@ -1,6 +1,6 @@
 {
   "name": "circle-cts",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "license": "MIT",
   "description": "Circle Reader Component Library",
   "sideEffects": [
@@ -25,9 +25,9 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.1",
     "antd": "^5.15.0",
-    "circle-react-hook": "^1.0.3",
-    "circle-ts": "^1.0.5",
-    "circle-utils": "^1.0.10",
+    "circle-react-hook": "^1.0.8",
+    "circle-ts": "^1.0.7",
+    "circle-utils": "^1.0.15",
     "classnames": "^2.5.1",
     "rc-align": "^4.0.15",
     "rc-virtual-list": "^3.11.3",
