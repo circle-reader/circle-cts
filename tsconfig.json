@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "sourceMap": false,
+    "target": "ES6",
+    "module": "ESNext",
     "strictNullChecks": true,
     "moduleResolution": "node",
     "lib": ["ESNext", "DOM"],
@@ -12,7 +14,6 @@
     "noImplicitAny": true,
     "declaration": true,
     "declarationDir": "dist",
-    "target": "ESNext",
     "skipLibCheck": true,
     "stripInternal": true,
     "outDir": "./dist",
