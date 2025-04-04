@@ -10,12 +10,13 @@
   position: fixed;
   top: var(--margin);
   right: calc(
-    (100vw - var(--width)) / 2 + var(--width) + var(--offsetright) / 2 + 16px
+    (100vw - var(--width)) / 2 + var(--width) + var(--offsetright) / 2 + 4px
   );
 
   .outline-inner {
     overflow: auto;
     max-width: 260px;
+    padding-right: 10px;
     max-height: calc(100vh - var(--margin) - 20px) !important;
 
     scrollbar-width: thin;
